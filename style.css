@@ -1,0 +1,22 @@
+#today {
+  border: solid;
+  border-color: lightgrey;
+  border-width: thin;
+  border-radius: 5px;
+  padding: 2em;
+}
+
+.uvRed {
+  background-color: red;
+  color: white;
+}
+
+.uvGreen {
+  background-color: green;
+  color: white;
+}
+
+.uvYellow{
+  background-color: yellow;
+  color:black;
+}

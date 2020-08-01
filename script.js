@@ -1,8 +1,12 @@
+
+
 $(document).ready(function() {
+  
   $("#search-button").on("click", function() {
     var searchValue = $("#search-value").val();
 
-    // clear input box
+    //clear input box
+    $("#search-value").val("");
 
     searchWeather(searchValue);
   });
@@ -13,13 +17,50 @@ $(document).ready(function() {
 
   function makeRow(text) {
     var li = $("<li>").addClass("list-group-item list-group-item-action").text(text);
+   
     $(".history").append(li);
   }
+  //uv index API
+  function getUVIndex(lat, lng) {
+    $.ajax({
+      type: 'GET',
+      dataType: 'json',
+      beforeSend: function(request) {
+        request.setRequestHeader('x-access-token', '05b20cf8a7d8b9b2c7d72b65ca1febc1');
+      },
+      url: 'https://api.openuv.io/api/v1/uv?lat=' + lat + '&lng=' + lng,
+      success: function(data) {
+        console.log(data);
+        //handle successful response
+        var clrClass = "uvGreen";
+        var uvNum = parseFloat(data.result.uv);
+        if (uvNum > 6) {
+          //severe
+          clrClass = "uvRed";
+
+        } else if (uvNum > 3) {
+          //moderate
+          clrClass = "uvYellow";
+        }
+        
+        uvNum = Math.round(uvNum * 10) / 10;
+        var uv = $("<p>").text("UV Index: ");
+        var btn = $("<span>").addClass("btn btn-sm " + clrClass).text(uvNum);
+        
+        // change color depending on uv value
+        $("#today").append(uv.append(btn));
+      },
+      error: function(data) {
+        // handle error response
+      }
+    });
+   }
 
   function searchWeather(searchValue) {
+    var apiSearchValue = searchValue.replace(" ", "+");
     $.ajax({
-      type: "",
-      url: "" + searchValue + "",
+      type: "GET",
+      url: "http://api.openweathermap.org/data/2.5/weather?q=" + apiSearchValue + "&apikey=6180c555df72e359c9872e24a035077b",
       dataType: "json",
       success: function(data) {
         // create history link for this search
@@ -31,10 +72,25 @@ $(document).ready(function() {
         }
         
         // clear any old content
-
+        $("#today").empty();
         // create html content for current weather
+        var tempConvert = Math.round((parseInt(data.main.temp) - 273.15) * 9/5 + 32);
+       
+        var location = $("<h3>").text(data.name + " " + "(" + moment().format('l') + ")"); 
+        var iconCode = data.weather[0].icon;
+        var iconURL = "http://openweathermap.org/img/wn/" + iconCode + "@2x.png";
+        var icon = $("<img>").attr("src", iconURL);
+        location.append(icon);
+        var temp = $("<p>").text("Temperature: " + tempConvert + "\xB0" + "F");
+        var humidity = $("<p>").text("Humidity: " + data.main.humidity + "%");
+        var windSpeed = $("<p>").text("Wind Speed: " + data.wind.speed + " m/s");
+       
 
         // merge and add to page
+        $("#today").append(location, temp, humidity, windSpeed);
+
+     
+        
         
         // call follow-up api endpoints
         getForecast(searchValue);
@@ -65,21 +121,21 @@ $(document).ready(function() {
     });
   }
 
-  function getUVIndex(lat, lon) {
-    $.ajax({
-      type: "",
-      url: "" + lat + "&lon=" + lon,
-      dataType: "json",
-      success: function(data) {
-        var uv = $("<p>").text("UV Index: ");
-        var btn = $("<span>").addClass("btn btn-sm").text(data.value);
+  // function getUVIndex(lat, lon) {
+  //   $.ajax({
+  //     type: "",
+  //     url: "" + lat + "&lon=" + lon,
+  //     dataType: "json",
+  //     success: function(data) {
+  //       var uv = $("<p>").text("UV Index: ");
+  //       var btn = $("<span>").addClass("btn btn-sm").text(data.value);
         
-        // change color depending on uv value
+  //       // change color depending on uv value
         
-        $("#today .card-body").append(uv.append(btn));
-      }
-    });
-  }
+  //       $("#today .card-body").append(uv.append(btn));
+  //     }
+  //   });
+  // }
 
   // get current history, if any
   var history = JSON.parse(window.localStorage.getItem("history")) || [];
