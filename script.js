@@ -73,9 +73,9 @@ $(document).ready(function() {
         
         // clear any old content
         $("#today").empty();
+
         // create html content for current weather
         var tempConvert = Math.round((parseInt(data.main.temp) - 273.15) * 9/5 + 32);
-       
         var location = $("<h3>").text(data.name + " " + "(" + moment().format('l') + ")"); 
         var iconCode = data.weather[0].icon;
         var iconURL = "http://openweathermap.org/img/wn/" + iconCode + "@2x.png";
@@ -84,59 +84,57 @@ $(document).ready(function() {
         var temp = $("<p>").text("Temperature: " + tempConvert + "\xB0" + "F");
         var humidity = $("<p>").text("Humidity: " + data.main.humidity + "%");
         var windSpeed = $("<p>").text("Wind Speed: " + data.wind.speed + " m/s");
-       
-
+      
         // merge and add to page
         $("#today").append(location, temp, humidity, windSpeed);
 
-     
-        
-        
         // call follow-up api endpoints
-        getForecast(searchValue);
+        getForecast(apiSearchValue);
         getUVIndex(data.coord.lat, data.coord.lon);
       }
     });
   }
   
-  function getForecast(searchValue) {
+  function getForecast(apiSearchValue) {
     $.ajax({
-      type: "",
-      url: "" + searchValue + "",
+      type: "GET",
+      url: "http://api.openweathermap.org/data/2.5/forecast?q=" + apiSearchValue + "&apikey=6180c555df72e359c9872e24a035077b",
       dataType: "json",
       success: function(data) {
+        console.log(data);
         // overwrite any existing content with title and empty row
+        $("#forecast").empty();
+      
 
         // loop over all forecasts (by 3-hour increments)
         for (var i = 0; i < data.list.length; i++) {
           // only look at forecasts around 3:00pm
           if (data.list[i].dt_txt.indexOf("15:00:00") !== -1) {
-            // create html elements for a bootstrap card
-            
+            // Time converter
+            var unixTimestamp = data.list[i].dt;
+            var milliseconds = unixTimestamp * 1000;
+            var dateObject = new Date(milliseconds);
+            var convertedTime = dateObject.toLocaleDateString();
+
+            // html elements for a bootstrap card
+            var card = $("<div>").addClass("card-body");
+            var weather = data.list[i];
+            var humidFore = $("<p>").text("Humidity: " + weather.main.humidity);
+            var tempFore = $("<p>").text("Temp: " + Math.round((parseInt(weather.main.temp) - 273.15) * 9/5 + 32) + "\xB0" + "F");
+            var iconCodeFore = weather.weather[0].icon;
+            var iconURLFore = "http://openweathermap.org/img/wn/" + iconCodeFore + "@2x.png";
+            var iconFore = $("<img>").attr("src", iconURLFore);
+            var date = $("<h4>").text(convertedTime);
 
             // merge together and put on page
+            card = card.append(date, iconFore, tempFore, humidFore);
+            $("#forecast").append(card);
           }
         }
       }
     });
   }
-
-  // function getUVIndex(lat, lon) {
-  //   $.ajax({
-  //     type: "",
-  //     url: "" + lat + "&lon=" + lon,
-  //     dataType: "json",
-  //     success: function(data) {
-  //       var uv = $("<p>").text("UV Index: ");
-  //       var btn = $("<span>").addClass("btn btn-sm").text(data.value);
-        
-  //       // change color depending on uv value
-        
-  //       $("#today .card-body").append(uv.append(btn));
-  //     }
-  //   });
-  // }
-
+  
   // get current history, if any
   var history = JSON.parse(window.localStorage.getItem("history")) || [];
 
