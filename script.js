@@ -20,6 +20,7 @@ $(document).ready(function() {
    
     $(".history").append(li);
   }
+  
   //uv index API
   function getUVIndex(lat, lng) {
     $.ajax({
@@ -56,6 +57,7 @@ $(document).ready(function() {
     });
    }
 
+  // Todays weather API 
   function searchWeather(searchValue) {
     var apiSearchValue = searchValue.replace(" ", "+");
     $.ajax({
@@ -95,21 +97,22 @@ $(document).ready(function() {
     });
   }
   
+  // 5 day forecast API
   function getForecast(apiSearchValue) {
     $.ajax({
       type: "GET",
       url: "http://api.openweathermap.org/data/2.5/forecast?q=" + apiSearchValue + "&apikey=6180c555df72e359c9872e24a035077b",
       dataType: "json",
       success: function(data) {
-        console.log(data);
+
         // overwrite any existing content with title and empty row
         $("#forecast").empty();
-      
 
         // loop over all forecasts (by 3-hour increments)
         for (var i = 0; i < data.list.length; i++) {
           // only look at forecasts around 3:00pm
           if (data.list[i].dt_txt.indexOf("15:00:00") !== -1) {
+            
             // Time converter
             var unixTimestamp = data.list[i].dt;
             var milliseconds = unixTimestamp * 1000;
@@ -134,7 +137,7 @@ $(document).ready(function() {
       }
     });
   }
-  
+
   // get current history, if any
   var history = JSON.parse(window.localStorage.getItem("history")) || [];
 

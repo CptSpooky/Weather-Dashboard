@@ -1,3 +1,7 @@
+h1 {
+  text-shadow: 2px 2px 50px #000000;
+}
+
 #today {
   border: solid;
   border-color: lightgrey;
@@ -35,3 +39,13 @@
 
 }
 
+.bg-dark {
+  background-image: url("https://images.unsplash.com/photo-1566996694954-90b052c413c4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80");
+  background-size: cover;
+  background-position: center;
+  padding: 4em !important;
+}
+
+.mt-1 {
+  margin-top: 1rem !important;
+}
