@@ -62,7 +62,7 @@ $(document).ready(function() {
     var apiSearchValue = searchValue.replace(" ", "+");
     $.ajax({
       type: "GET",
-      url: "http://api.openweathermap.org/data/2.5/weather?q=" + apiSearchValue + "&apikey=6180c555df72e359c9872e24a035077b",
+      url: "https://api.openweathermap.org/data/2.5/weather?q=" + apiSearchValue + "&apikey=6180c555df72e359c9872e24a035077b",
       dataType: "json",
       success: function(data) {
         // create history link for this search
