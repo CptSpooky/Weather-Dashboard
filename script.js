@@ -80,7 +80,7 @@ $(document).ready(function() {
         var tempConvert = Math.round((parseInt(data.main.temp) - 273.15) * 9/5 + 32);
         var location = $("<h3>").text(data.name + " " + "(" + moment().format('l') + ")"); 
         var iconCode = data.weather[0].icon;
-        var iconURL = "http://openweathermap.org/img/wn/" + iconCode + "@2x.png";
+        var iconURL = "https://openweathermap.org/img/wn/" + iconCode + "@2x.png";
         var icon = $("<img>").attr("src", iconURL);
         location.append(icon);
         var temp = $("<p>").text("Temperature: " + tempConvert + "\xB0" + "F");
@@ -101,7 +101,7 @@ $(document).ready(function() {
   function getForecast(apiSearchValue) {
     $.ajax({
       type: "GET",
-      url: "http://api.openweathermap.org/data/2.5/forecast?q=" + apiSearchValue + "&apikey=6180c555df72e359c9872e24a035077b",
+      url: "https://api.openweathermap.org/data/2.5/forecast?q=" + apiSearchValue + "&apikey=6180c555df72e359c9872e24a035077b",
       dataType: "json",
       success: function(data) {
 
@@ -125,7 +125,7 @@ $(document).ready(function() {
             var humidFore = $("<p>").text("Humidity: " + weather.main.humidity);
             var tempFore = $("<p>").text("Temp: " + Math.round((parseInt(weather.main.temp) - 273.15) * 9/5 + 32) + "\xB0" + "F");
             var iconCodeFore = weather.weather[0].icon;
-            var iconURLFore = "http://openweathermap.org/img/wn/" + iconCodeFore + "@2x.png";
+            var iconURLFore = "https://openweathermap.org/img/wn/" + iconCodeFore + "@2x.png";
             var iconFore = $("<img>").attr("src", iconURLFore);
             var date = $("<h4>").text(convertedTime);
 
