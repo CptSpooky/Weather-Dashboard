@@ -28,7 +28,7 @@ Passes the modified user input to find the city called in OpenWeather's 5 day fo
 
 ![image forecast](https://user-images.githubusercontent.com/66426144/89112762-ea734700-d435-11ea-8fe3-a1bdeecb49bb.png)
 
-## Technology Used
+## Technologies Used
 * Javascript
 * JQuery
 * OpenUV API
@@ -36,6 +36,7 @@ Passes the modified user input to find the city called in OpenWeather's 5 day fo
 * AJAX
 * HTML
 * CSS
+* Bootstrap
 
 ## Credits
 [OpenUV](https://www.openuv.io/)
