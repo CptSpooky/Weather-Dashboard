@@ -38,6 +38,9 @@ Passes the modified user input to find the city called in OpenWeather's 5 day fo
 * CSS
 * Bootstrap
 
+## License
+MIT
+
 ## Credits
 [OpenUV](https://www.openuv.io/)
 [OpenWeather](https://openweathermap.org/)
