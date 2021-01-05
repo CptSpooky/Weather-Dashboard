@@ -2,6 +2,10 @@ h1 {
   text-shadow: 2px 2px 50px #000000;
 }
 
+.row {
+  height: 100vh;
+}
+
 #today {
   border: solid;
   border-color: lightgrey;
